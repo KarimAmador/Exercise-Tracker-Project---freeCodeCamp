@@ -17,18 +17,19 @@ app.get('/', (req, res) => {
 app.post('/api/users', async function(req, res) {
   console.log(req.body);
 
-  let user = await User.findOne({ username: req.body.username })
+  try {
+    let user = await User.findOne({ username: req.body.username })
 
-  if (!user) {
-    try {
+    if (!user) {
       user = new User({
         username: req.body.username
       })
-      await user.save()
-    } catch (err) {
-      console.error(err)
-      return res.json({error: err.toString().slice(7)})
     }
+    
+    await user.save()
+  } catch (err) {
+    console.error(err)
+    return res.json({error: err.toString().slice(7)})
   }
 
   res.json({
