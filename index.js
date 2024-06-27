@@ -4,7 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const { default: mongoose } = require('mongoose')
 const connectDB = require('./db/connect')
-const userModel = require('./models/user')
+const User = require('./models/user')
 require('dotenv').config()
 
 app.use(cors())
