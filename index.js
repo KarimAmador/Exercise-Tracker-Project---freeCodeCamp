@@ -38,6 +38,38 @@ app.post('/api/users', async function(req, res) {
   }
 })
 
+app.post('/api/users/:_id/exercises', async function(req, res) {
+  console.log(req.body);
+
+  try {
+    let user = await User.findById(req.body[':_id']);
+
+    console.log(user);
+
+    if (user) {
+      user.log.push({
+        description: req.body.description,
+        duration: Number(req.body.duration),
+        date: new Date(req.body.date).toDateString()
+      })
+
+      await user.save();
+
+      res.json({
+        username: user.username,
+        count: user.count,
+        _id: user._id,
+        log: user.log
+      });
+    } else {
+      throw new Error("User doesn't exist")
+    }
+  } catch (err) {
+    console.error(err)
+    res.json({error: err.toString().slice(7)})
+  }
+})
+
 async function start() {
   try {
     await connectDB();
