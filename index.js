@@ -27,15 +27,15 @@ app.post('/api/users', async function(req, res) {
     }
     
     await user.save()
+
+    res.json({
+      username: user.username,
+      _id: user._id.toString()
+    });
   } catch (err) {
     console.error(err)
     return res.json({error: err.toString().slice(7)})
   }
-
-  res.json({
-    username: user.username,
-    _id: user._id.toString()
-  });
 })
 
 async function start() {
