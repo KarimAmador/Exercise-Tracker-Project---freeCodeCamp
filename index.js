@@ -53,6 +53,8 @@ app.post('/api/users/:_id/exercises', async function(req, res) {
         date: new Date(req.body.date).toDateString()
       })
 
+      user.count += 1;
+
       await user.save();
 
       res.json({
