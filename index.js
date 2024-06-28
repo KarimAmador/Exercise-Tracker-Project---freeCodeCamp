@@ -70,6 +70,20 @@ app.post('/api/users/:_id/exercises', async function(req, res) {
   }
 })
 
+app.get('/api/users', async function(req, res) {
+  try {
+    const users = await User.find({});
+    const responseObj = Array.from(users).map(obj => {
+      return {username: obj.username, _id: obj._id};
+    });
+  
+    res.json(responseObj);
+  } catch (err) {
+    console.error(err);
+    res.json({error: err.toString().slice(7)});
+  }
+})
+
 async function start() {
   try {
     await connectDB();
