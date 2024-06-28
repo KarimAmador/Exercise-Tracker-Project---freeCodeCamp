@@ -86,6 +86,24 @@ app.get('/api/users', async function(req, res) {
   }
 })
 
+app.get('/api/users/:_id/logs', async function(req, res) {
+  console.log(req.params)
+
+  try {
+    const userLog = await User.findById(req.params._id);
+
+    res.json({
+      username: userLog.username,
+      count: userLog.count,
+      _id: userLog._id,
+      log: userLog.log
+    });
+  } catch (err) {
+    console.error(err);
+    res.json({error: err.toString()});
+  }
+})
+
 async function start() {
   try {
     await connectDB();
