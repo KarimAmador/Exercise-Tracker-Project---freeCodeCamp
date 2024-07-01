@@ -51,6 +51,8 @@ app.post('/api/users/:_id/exercises', async function(req, res) {
         duration: Number(req.body.duration),
         date: req.body.date ? new Date(req.body.date).toDateString() : undefined
       })
+
+      user.log.sort((a, b) => new Date(a.date) - new Date(b.date));
       
       user.count += 1;
       
