@@ -10,6 +10,11 @@ require('dotenv').config()
 app.use(cors())
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(function(req, res, next) {
+  console.log(`${req.method} ${req.path} - ${req.ip}`);
+  next();
+});
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
@@ -39,10 +44,9 @@ app.post('/api/users', async function(req, res) {
 })
 
 app.post('/api/users/:_id/exercises', async function(req, res) {
-  console.log(req.body);
+  console.log(req.body, req.params);
 
   try {
-    console.log('PARAMS:', req.params);
     let user = await User.findById(req.params._id);
 
     if (user) {
@@ -91,7 +95,7 @@ app.get('/api/users', async function(req, res) {
 })
 
 app.get('/api/users/:_id/logs', async function(req, res) {
-  console.log('GET request to /api/users/:_id/logs\n', req.params, req.query)
+  console.log(req.params, req.query)
 
   try {
     const userLog = await User.findById(req.params._id);
