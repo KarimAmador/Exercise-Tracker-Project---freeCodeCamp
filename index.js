@@ -34,7 +34,7 @@ app.post('/api/users', async function(req, res) {
     });
   } catch (err) {
     console.error(err)
-    return res.json({error: err.toString().slice(7)})
+    res.json({"error name": err.name, message: err.message});
   }
 })
 
@@ -72,7 +72,7 @@ app.post('/api/users/:_id/exercises', async function(req, res) {
     }
   } catch (err) {
     console.error(err)
-    res.json({error: err.toString()})
+    res.json({"error name": err.name, message: err.message});
   }
 })
 
@@ -86,7 +86,7 @@ app.get('/api/users', async function(req, res) {
     res.json(responseObj);
   } catch (err) {
     console.error(err);
-    res.json({error: err.toString().slice(7)});
+    res.json({"error name": err.name, message: err.message});
   }
 })
 
@@ -113,7 +113,7 @@ app.get('/api/users/:_id/logs', async function(req, res) {
     });
   } catch (err) {
     console.error(err);
-    res.json({error: err.toString()});
+    res.json({"error name": err.name, message: err.message});
   }
 })
 
