@@ -46,7 +46,7 @@ app.post('/api/users/:_id/exercises', async function(req, res) {
     let user = await User.findById(req.params._id);
 
     if (user) {
-      user.log.push({
+      user.log.unshift({
         description: req.body.description,
         duration: Number(req.body.duration),
         date: req.body.date ? new Date(req.body.date).toDateString() : undefined
