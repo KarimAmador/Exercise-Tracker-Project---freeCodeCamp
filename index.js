@@ -52,7 +52,7 @@ app.post('/api/users/:_id/exercises', async function(req, res) {
         date: req.body.date ? new Date(req.body.date).toDateString() : undefined
       })
 
-      user.log.sort((a, b) => new Date(a.date) - new Date(b.date));
+      user.log.sort((a, b) => new Date(b.date) - new Date(a.date));
       
       user.count += 1;
       
@@ -91,16 +91,25 @@ app.get('/api/users', async function(req, res) {
 })
 
 app.get('/api/users/:_id/logs', async function(req, res) {
-  console.log(req.params)
+  console.log('GET request to /api/users/:_id/logs\n', req.params, req.query)
 
   try {
     const userLog = await User.findById(req.params._id);
+
+    let newLog = userLog.log;
+    
+    newLog = newLog.slice(
+      req.query.to ? newLog.findIndex((item) => new Date(item.date) <= new Date(req.query.to)) : 0,
+      req.query.from ? newLog.findLastIndex((item) => new Date(item.date) >= new Date(req.query.from)) + 1 : undefined
+    );
+
+    if (req.query.limit) newLog = newLog.slice(0, Math.abs(Number(req.query.limit)) - 1 < 0 ? undefined : Math.abs(Number(req.query.limit)));
 
     res.json({
       username: userLog.username,
       count: userLog.count,
       _id: userLog._id,
-      log: userLog.log
+      log: newLog
     });
   } catch (err) {
     console.error(err);
