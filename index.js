@@ -95,6 +95,10 @@ app.get('/api/users/:_id/logs', async function(req, res) {
 
   try {
     const userLog = await User.findById(req.params._id);
+    
+    if (!userLog) {
+      throw new Error('User not found');
+    }
 
     let newLog = userLog.log;
     
