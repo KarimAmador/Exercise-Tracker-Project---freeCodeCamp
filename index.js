@@ -42,33 +42,35 @@ app.post('/api/users/:_id/exercises', async function(req, res) {
   console.log(req.body);
 
   try {
-    let user = await User.findById(req.body[':_id']);
-
-    console.log(user);
+    console.log('PARAMS:', req.params);
+    let user = await User.findById(req.params._id);
 
     if (user) {
       user.log.push({
         description: req.body.description,
         duration: Number(req.body.duration),
-        date: new Date(req.body.date).toDateString()
+        date: req.body.date ? new Date(req.body.date).toDateString() : undefined
       })
-
+      
       user.count += 1;
-
+      
+      console.log(user);
+      
       await user.save();
 
       res.json({
         username: user.username,
-        count: user.count,
-        _id: user._id,
-        log: user.log
+        description: user.log[user.count - 1].description,
+        duration: user.log[user.count - 1].duration,
+        date: user.log[user.count - 1].date,
+        _id: user._id.toString()
       });
     } else {
       throw new Error("User doesn't exist")
     }
   } catch (err) {
     console.error(err)
-    res.json({error: err.toString().slice(7)})
+    res.json({error: err.toString()})
   }
 })
 
